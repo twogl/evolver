@@ -13,7 +13,7 @@ type Circle struct {
 	clr            color.Color
 	radius         int
 	posX, posY     int
-	vX, vY         int
+	endX, endY     int
 }
 
 // drawCircle draws a filled circle at (cx, cy) with radius r and color clr.
@@ -27,22 +27,20 @@ func (g *Circle) Draw(screen *ebiten.Image) {
 	}
 }
 
-func (g *Circle) Update(game *Game) {
+func (c *Circle) Update(game *Game) {
 
-	if time.Since(g.lastUpdateTime) >= g.updateDelay {
-		g.posX += g.vX
-		g.posY += g.vY
+	if time.Since(c.lastUpdateTime) >= c.updateDelay {
 
-		// Bounce off walls
-		if g.posX-g.radius < 0 || g.posX+g.radius > game.screenWidth {
-			g.vX = -g.vX
-			g.posX += g.vX
-		}
-		if g.posY-g.radius < 0 || g.posY+g.radius > game.screenHeight {
-			g.vY = -g.vY
-			g.posY += g.vY
+		if c.posX < c.endX {
+			c.posX += 6
+		} else if c.posX > c.endX {
+			c.posX -= 6
+		} else if c.posY < c.endY {
+			c.posY += 6
+		} else if c.posY > c.endY {
+			c.posY -= 6
 		}
 
-		g.lastUpdateTime = time.Now()
+		c.lastUpdateTime = time.Now()
 	}
 }
